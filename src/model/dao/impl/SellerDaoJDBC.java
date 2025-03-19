@@ -27,7 +27,7 @@ public class SellerDaoJDBC implements SellerDao {
 		
 	}
 
-	@Override
+	@Override	
 	public void update(Seller obj) {
 		// TODO Auto-generated method stub
 		
@@ -55,17 +55,9 @@ public class SellerDaoJDBC implements SellerDao {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if(rs.next()) {
-				Department dep = new Department();
-				dep.setId(rs.getInt("departmentid"));
-				dep.setName(rs.getString("depname"));
+				Department dep = instantiateDepartment(rs);
 				
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("id"));
-				obj.setName(rs.getString("name"));
-				obj.setEmail(rs.getString("email"));
-				obj.setBaseSalary(rs.getDouble("baseSalary"));
-				obj.setBirthDate(rs.getDate("birthDate"));
-				obj.setDepartment(dep);
+				Seller obj = instantiateSeller(rs, dep);
 				
 				return obj;
 				
@@ -79,6 +71,27 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeResultSet(rs);
 		}
 		
+	}
+
+	// next two methods are using `throws SQLException` because
+	// we are already handling exception above (on the block they are called it has a catch SQLException)
+	// so we just need propagate using this throws keyword. 
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		 Seller obj = new Seller();
+			obj.setId(rs.getInt("id"));
+			obj.setName(rs.getString("name"));
+			obj.setEmail(rs.getString("email"));
+			obj.setBaseSalary(rs.getDouble("baseSalary"));
+			obj.setBirthDate(rs.getDate("birthDate"));
+			obj.setDepartment(dep);			
+			return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("departmentid"));
+		dep.setName(rs.getString("depname"));
+		return dep;
 	}
 
 	@Override
