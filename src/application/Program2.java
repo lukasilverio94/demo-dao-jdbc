@@ -39,7 +39,12 @@ public class Program2 {
 		departmentDao.update(dep);
 		System.out.println("Update completed");
 		System.out.println();
-
+		// ====================================================================
+		System.out.println("=== TEST 5: department deleteById ===");
+		System.out.println("Enter id for delete test: ");
+		int id = sc.nextInt();
+		departmentDao.deleteById(id);
+		System.out.println("User with ID=(" + id + ") deleted successfully");
 		sc.close();
 	}
 }
